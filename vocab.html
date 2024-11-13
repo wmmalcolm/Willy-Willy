@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vocabulary Test</title>
+    <script>
+        let correctAnswers = [];
+
+        function generateVocabularyTest() {
+            const vocabulary = {
+                "Accomplice": "A person who helps another commit a crime or wrongdoing.",
+                "Annihilate": "To destroy completely, leaving nothing behind.",
+                "Arbitrary": "Based on random choice or personal whim, rather than any reason or system.",
+                "Brazen": "Bold and shameless; without concern for what others think.",
+                "Catalyst": "Something or someone that causes a significant change or speeds up a process without being affected itself.",
+                "Exodus": "A mass departure of people, especially emigrants.",
+                "Facilitate": "To make an action or process easier or smoother.",
+                "Incorrigible": "Not able to be corrected, improved, or reformed; often used to describe someone’s behavior.",
+                "Latent": "Existing but not yet developed or visible; hidden potential.",
+                "Militant": "Aggressive and active in support of a cause, often in a confrontational or combative way.",
+                "Morose": "Sullen, gloomy, or ill-tempered.",
+                "Opaque": "Not transparent or clear; hard to understand or see through.",
+                "Paramount": "More important than anything else; supreme.",
+                "Prattle": "To talk in a foolish or simple-minded way; to chatter or babble.",
+                "Rebut": "To argue against or refute an accusation or evidence.",
+                "Reprimand": "To scold or rebuke someone formally.",
+                "Servitude": "The state of being under someone’s control; slavery or forced labor.",
+                "Slapdash": "Done carelessly or hastily; lacking attention to detail.",
+                "Stagnant": "Not moving or flowing, often referring to water; inactive or dull.",
+                "Succumb": "To give in to a force or desire; to stop resisting, often resulting in defeat."
+            };
+
+            const words = Object.entries(vocabulary);
+            correctAnswers = words.map(([word, definition]) => definition);
+
+            const questionsContainer = document.getElementById("questions");
+            questionsContainer.innerHTML = "";
+
+            words.forEach(([word, correctDefinition], index) => {
+                const otherDefinitions = words.filter(([w, d]) => w !== word).map(([w, d]) => d);
+                const incorrectChoices = otherDefinitions.sort(() => 0.5 - Math.random()).slice(0, 3);
+                const allChoices = [...incorrectChoices, correctDefinition].sort(() => 0.5 - Math.random());
+
+                const questionDiv = document.createElement("div");
+                questionDiv.className = "question";
+
+                const questionText = document.createElement("p");
+                questionText.textContent = `${index + 1}. What is the meaning of the word '${word}'?`;
+                questionDiv.appendChild(questionText);
+
+                allChoices.forEach((choice) => {
+                    const label = document.createElement("label");
+                    label.textContent = choice;
+
+                    const radio = document.createElement("input");
+                    radio.type = "radio";
+                    radio.name = `question-${index}`;
+                    radio.value = choice;
+
+                    label.prepend(radio);
+                    questionDiv.appendChild(label);
+                    questionDiv.appendChild(document.createElement("br"));
+                });
+
+                questionsContainer.appendChild(questionDiv);
+            });
+        }
+
+        function checkAnswers() {
+            let score = 0;
+
+            correctAnswers.forEach((correctAnswer, index) => {
+                const selected = document.querySelector(`input[name="question-${index}"]:checked`);
+                if (selected && selected.value === correctAnswer) {
+                    score++;
+                }
+            });
+
+            alert(`You scored ${score} out of ${correctAnswers.length}`);
+        }
+
+        window.onload = generateVocabularyTest;
+    </script>
+</head>
+<body>
+    <h1>Vocabulary Test</h1>
+    <div id="questions"></div>
+    <button onclick="checkAnswers()">Submit Test</button>
+</body>
+</html>
+
+
